@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MALHA — Camisetas sob encomenda</title>
+<meta name="description" content="Catálogo de camisetas sob encomenda: linha básica estampada e linha premium 100% algodão sustentável. Do PP ao XG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#top" class="nav__brand">MALHA<span class="nav__dot">.</span></a>
+    <nav class="nav__tabs" role="tablist" aria-label="Linhas de produtos">
+      <button class="nav__tab is-active" data-target="basica" role="tab" aria-selected="true">Linha Básica</button>
+      <button class="nav__tab" data-target="premium" role="tab" aria-selected="false">Linha Premium</button>
+    </nav>
+    <a class="nav__cta" href="#" id="navWhats" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.3A8.9 8.9 0 0 0 3.1 16.9L2 22l5.2-1.4A8.9 8.9 0 0 0 17.6 6.3ZM12 20a7.9 7.9 0 0 1-4-1.1l-.3-.2-3 .8.8-2.9-.2-.3A7.9 7.9 0 1 1 12 20Z" fill="currentColor"/><path d="M16 14.3c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.7-.3-1.5-.8-2.1-1.5-.5-.6-.9-1.2-1-1.5-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.1-.5-.1-.1-.5-1.3-.7-1.8-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.6.6-.9 1.4-.9 2.2.1 1 .5 2 1.3 3 1 1.5 2.2 2.6 3.7 3.3.4.2.8.3 1.2.4.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.1-.4-.2Z" fill="currentColor"/></svg>
+      Chamar no Whats
+    </a>
+    <button class="nav__burger" id="burger" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__fabric" aria-hidden="true"></div>
+    <div class="hero__inner">
+      <p class="hero__eyebrow">catálogo · costurado sob encomenda</p>
+      <h1 class="hero__title">Camiseta boa<br>começa na etiqueta.</h1>
+      <p class="hero__sub">Estampa própria pra sua turma ou básicos premium 100% algodão sustentável. Fio penteado, não torce, não encolhe — e cada peça sai com a etiqueta certinha, do jeitinho que você vê aqui.</p>
+      <div class="hero__actions">
+        <a href="#basica" class="btn btn--thread" data-scrollto="basica">Ver Linha Básica</a>
+        <a href="#premium" class="btn btn--ghost" data-scrollto="premium">Ver Linha Premium</a>
+      </div>
+    </div>
+    <div class="hero__tag" aria-hidden="true">
+      <div class="hero__tag-string"></div>
+      <img src="assets/img/real_tag.jpg" alt="">
+    </div>
+  </section>
+
+  <!-- ===== LINHA BÁSICA ===== -->
+  <section class="line line--basica" id="basica">
+    <div class="line__head">
+      <span class="line__index">01</span>
+      <div>
+        <h2 class="line__title">Linha Básica</h2>
+        <p class="line__desc">Estampa "Engenharia Eletrônica 2026.1" — fio 30/1 compactado, 100% algodão, pré-encolhida no tingimento. Ideal pra fechar camiseta de turma sem pesar no bolso.</p>
+      </div>
+      <div class="line__price-range">
+        <span>a partir de</span>
+        <strong>R$50</strong>
+      </div>
+    </div>
+
+    <div class="tag-grid" id="basicaGrid"></div>
+
+    <div class="proof">
+      <div class="proof__text">
+        <span class="line__index">—</span>
+        <h3>Não é render, é peça de verdade</h3>
+        <p>Fotos reais de um lote entregue: a etiqueta interna com o tamanho e as instruções de lavagem, e a estampa nas costas já aplicada na malha.</p>
+      </div>
+      <div class="proof__photos">
+        <img src="assets/img/real_tag.jpg" alt="Etiqueta interna da camiseta básica, tamanho G, com símbolos de lavagem">
+        <img src="assets/img/real_back.jpg" alt="Costas da camiseta preta com estampa aplicada">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LINHA PREMIUM ===== -->
+  <section class="line line--premium" id="premium">
+    <div class="line__head">
+      <span class="line__index">02</span>
+      <div>
+        <h2 class="line__title">Linha Premium</h2>
+        <p class="line__desc">Algodão sustentável 30.1 penteado, 175g/m², toque ultra macio. Não torce, não encolhe, levemente perfumadas — acabamento de confecção grande em peça sob encomenda.</p>
+      </div>
+      <div class="line__price-range">
+        <span>a partir de</span>
+        <strong>R$79,90</strong>
+      </div>
+    </div>
+
+    <div class="filters" role="tablist" aria-label="Filtrar linha premium">
+      <button class="filter is-active" data-filter="todos">Todos</button>
+      <button class="filter" data-filter="feminino">Feminino</button>
+      <button class="filter" data-filter="masculino">Masculino</button>
+      <button class="filter" data-filter="unissex">Unissex</button>
+    </div>
+
+    <div class="tag-grid tag-grid--premium" id="premiumGrid"></div>
+  </section>
+
+  <!-- ===== SELO / CUIDADOS ===== -->
+  <section class="care">
+    <h2 class="care__title">Toda peça sai com esse selo de cuidado</h2>
+    <div class="care__row">
+      <div class="care__item"><span>↻</span>Não torce</div>
+      <div class="care__item"><span>⊘</span>Não encolhe</div>
+      <div class="care__item"><span>✧</span>Levemente perfumadas</div>
+      <div class="care__item"><span>◆</span>Durabilidade prolongada</div>
+      <div class="care__item"><span>✓</span>Fio penteado / compactado</div>
+    </div>
+  </section>
+
+  <!-- ===== CONTATO ===== -->
+  <section class="contact" id="contato">
+    <div class="contact__inner">
+      <h2>Fechou a arte?<br>Bora combinar tamanho, cor e prazo.</h2>
+      <p>Me chama no WhatsApp com o modelo, a cor e o tamanho — te devolvo o valor final e o prazo de entrega na hora.</p>
+      <a href="#" id="contactWhats" class="btn btn--thread btn--lg" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+      <p class="contact__note">Pedido mínimo e prazos variam por lote — pergunte antes de fechar.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Imagens meramente ilustrativas. Medidas podem variar até 5% (linha básica) ou 2cm (linha premium) entre peças. Feito por você, com HTML, CSS e JS puros.</p>
+</footer>
+
+<!-- ===== TEMPLATE: tag card ===== -->
+<template id="tagCardTemplate">
+  <article class="tag-card">
+    <div class="tag-card__hole"></div>
+    <div class="tag-card__flip">
+      <div class="tag-card__face tag-card__face--front">
+        <div class="tag-card__photo">
+          <img loading="lazy">
+          <span class="tag-card__badge"></span>
+        </div>
+        <div class="tag-card__body">
+          <h3 class="tag-card__name"></h3>
+          <p class="tag-card__note"></p>
+          <div class="tag-card__colors"></div>
+          <div class="tag-card__foot">
+            <div class="tag-card__price"></div>
+            <button class="tag-card__flipbtn" type="button">Ver medidas ↻</button>
+          </div>
+        </div>
+      </div>
+      <div class="tag-card__face tag-card__face--back">
+        <div class="tag-card__back-head">
+          <h4></h4>
+          <button class="tag-card__flipbtn" type="button">Voltar ↺</button>
+        </div>
+        <table class="tag-card__table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+        <p class="tag-card__composition"></p>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>
