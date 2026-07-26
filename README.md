@@ -39,9 +39,34 @@ nos arrays `basicaProducts` e `premiumProducts`. Cada produto é um objeto simpl
 copie um bloco existente pra adicionar um produto novo, ou edite os valores direto.
 
 ### 4. Fotos
-As fotos ficam em `assets/img/`. Pra trocar a foto de um produto, basta substituir o
-arquivo (mantendo o mesmo nome) ou apontar `img: "assets/img/novo-arquivo.jpg"` pro
-novo arquivo no `script.js`.
+As fotos ficam em `assets/img/`. Pra trocar a foto padrão de um produto, basta
+substituir o arquivo (mantendo o mesmo nome) ou apontar `img: "assets/img/novo-arquivo.jpg"`
+pro novo arquivo no `script.js`.
+
+### 5. Fotos por cor (clique na bolinha de cor)
+Cada bolinha de cor já é clicável e tenta carregar uma foto específica daquela cor.
+Enquanto a foto não existir, a bolinha só dá uma piscadinha vermelha e nada quebra —
+o site continua mostrando a foto padrão normalmente.
+
+Pra ativar a foto de uma cor específica, basta criar o arquivo no caminho:
+
+```
+assets/img/colors/<produto-em-slug>/<cor-em-slug>.jpg
+```
+
+O "slug" é o nome em minúsculo, sem acento, com espaço virando hífen. Exemplos:
+
+| Produto (name no script.js) | Cor | Caminho do arquivo |
+|---|---|---|
+| Oversized | Azul Marinho | `assets/img/colors/oversized/azul-marinho.jpg` |
+| Camiseta Básica | Vermelho Claro | `assets/img/colors/camiseta-basica/vermelho-claro.jpg` |
+| Cropped Regata de Ribana | Verde Musgo | `assets/img/colors/cropped-regata-de-ribana/verde-musgo.jpg` |
+| Baby Look Estonada | Azul Marinho | `assets/img/colors/baby-look-estonada/azul-marinho.jpg` |
+
+Regra geral: pegue o `name` do produto e o nome da cor exatamente como estão no
+`script.js`, passe os dois pelo mesmo processo (minúsculo, sem acento, espaço → hífen)
+e essa é a pasta/arquivo esperado. Assim que o arquivo existir nesse caminho, o clique
+na cor já troca a foto sozinho — não precisa mexer em nenhum código.
 
 ## Estrutura
 

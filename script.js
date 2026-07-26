@@ -11,21 +11,81 @@ const CONFIG = {
 
 /* --------- mapa de cores nomeadas -> hex aproximado --------- */
 const COLOR_MAP = {
-  "Azul Marinho": "#1c2b4a", "Verde Escuro": "#1f4d34", "Roxo": "#5b2a86",
-  "Amarelo": "#f0b429", "Azul Claro": "#7fc4e8", "Vinho": "#5e1a24",
-  "Bandeira": "#0e8a3e", "Preto": "#111113", "Cinza": "#9a9a9a",
-  "Branco": "#f5f3ee", "Rosa Claro": "#f2c6d3", "Pink": "#d6216b",
-  "Laranja Telha": "#c1552c", "Bege": "#e6d5b8", "Mescla": "#a8a8a4",
-  "Vermelho Claro": "#c23b2e", "Azul": "#1f5fbf", "Laranja": "#e8792b",
-  "Marrom": "#4a3222", "Salmão": "#e8a27e", "Verde Musgo": "#77816a",
-  "Mostarda": "#b9902f", "Lilás": "#b9a0d4", "Chumbo": "#4a4a4c",
-  "Azul Petróleo": "#33495e", "Bordô": "#5e1a24", "Areia": "#d7bd93",
+  "Azul Marinho": "#1c2b4a",
+  "Esmeralda": "#1f4d34",
+  "Verde Floresta": "#1f4d34",
+  "Verde Escuro": "#1f4d34",
+  "Roxo": "#5b2a86",
+  "Amarelo": "#f0b429",
+  "Azul Oceano": "#7fc4e8",
+  "Azul Claro": "#7fc4e8",
+  "Bordo": "#5e1a24",
+  "Vinho": "#5e1a24",
+  "Bandeira": "#0e8a3e",
+  "Preto": "#111113",
+  "Cinza": "#9a9a9a",
+  "Branco": "#f5f3ee",
+  "Rosa Claro": "#f2c6d3",
+  "Rosa": "#d6216b",
+  "Marrom Pardo": "#c1552c",
+  "Laranja Telha": "#c1552c",
+  "Cappuccino": "#e6d5b8",
+  "Mescla": "#a8a8a4",
+  "Vermelho Claro": "#c23b2e",
+  "Azul": "#1f5fbf",
+  "Laranja": "#e8792b",
+  "Marrom": "#4a3222",
+  "Salmão": "#e8a27e",
+  "Militar": "#77816a",
+  "Marrom Bronze": "#b9902f",
+  "Lilás": "#b9a0d4",
+  "Chumbo": "#4a4a4c",
+  "Azul Petróleo": "#33495e",
+  "Areia": "#d7bd93",
+  "Bege": "#d7bd93",
+  "Off White Reativo": "#fff3e0",
   "Verde Bandeira": "#0e8a3e",
 };
 
-function swatch(name){
+/* transforma "Azul Marinho" -> "azul-marinho" pra montar nome de arquivo */
+function slugify(str){
+  return str.toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+}
+
+/* caminho esperado da foto de cada cor: assets/img/colors/<produto>/<cor>.jpg */
+function colorImagePath(productSlug, colorName){
+  return `assets/img/colors/${productSlug}/${slugify(colorName)}.jpg`;
+}
+
+function swatchBtn(productSlug, name){
   const hex = COLOR_MAP[name] || "#888";
-  return `<span class="tag-card__swatch" style="background:${hex}" data-title="${name}"></span>`;
+  const img = colorImagePath(productSlug, name);
+  return `<button type="button" class="tag-card__swatch" style="background:${hex}" data-title="${name}" data-color="${name}" data-img="${img}" aria-label="Ver cor ${name}"></button>`;
+}
+
+/* liga os cliques nas bolinhas de cor à troca de foto do cartão */
+function wireColorSwatches(node){
+  const photoImg = node.querySelector(".tag-card__photo img");
+  const buttons = node.querySelectorAll(".tag-card__swatch");
+  buttons.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const path = btn.dataset.img;
+      const tester = new Image();
+      tester.onload = () => {
+        buttons.forEach(b=>b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        photoImg.style.opacity = 0;
+        setTimeout(()=>{ photoImg.src = path; photoImg.style.opacity = 1; }, 140);
+      };
+      tester.onerror = () => {
+        // ainda não existe foto pra essa cor -> avisa sem quebrar nada
+        btn.classList.add("tag-card__swatch--missing");
+        setTimeout(()=> btn.classList.remove("tag-card__swatch--missing"), 900);
+      };
+      tester.src = path;
+    });
+  });
 }
 
 /* --------- LINHA BÁSICA --------- */
@@ -35,36 +95,36 @@ const basicaProducts = [
   {
     name: "Oversized",
     note: "Corte solto, caimento streetwear.",
-    img: "assets/img/oversized_front_black.jpg",
-    priceOld: 90, priceNow: 70,
-    colors: ["Azul Marinho","Bandeira","Verde Escuro","Preto","Roxo","Cinza","Amarelo","Branco","Azul Claro","Rosa Claro","Vinho","Pink","Laranja Telha","Bege","Mescla","Azul","Vermelho Claro","Laranja"],
+    img: "assets/img/colors/oversized/preto.jpg",
+    priceOld: 109.90, priceNow: 87.90,
+    colors: ["Azul Marinho","Bandeira","Verde Escuro","Preto","Roxo","Cinza","Amarelo","Branco","Azul Claro","Rosa Claro","Vinho","Rosa","Laranja Telha","Bege","Mescla","Azul","Vermelho Claro","Laranja"],
     sizes: [["P","76","53"],["M","77","56"],["G","79","58"],["GG","82,5","61"]],
     comp: "100% algodão · fio 30/1 compactado · pré-encolhida no tingimento",
   },
   {
-    name: "Camiseta Básica",
+    name: "Camiseta Básica Ribana",
     note: "O modelo clássico, direto ao ponto.",
-    img: "assets/img/basica_front_black.jpg",
-    priceOld: 80, priceNow: 70,
+    img: "assets/img/colors/camiseta-basica-ribana/preto.jpg",
+    priceOld: 105.90, priceNow: 85.90,
     colors: ["Preto","Azul Marinho","Cinza","Verde Escuro","Branco","Azul Claro","Bege","Laranja Telha","Laranja","Vermelho Claro","Marrom"],
     sizes: [["P","67","50"],["M","68","52"],["G","71","53"],["GG","74","55"]],
     comp: "100% algodão · fio 30/1 compactado · pré-encolhida no tingimento",
   },
   {
-    name: "BabyLook",
+    name: "Baby Look Básica",
     note: "Modelagem feminina, caimento ajustado.",
-    img: "assets/img/babylook_front_black.jpg",
-    priceOld: 70, priceNow: 60,
-    colors: ["Preto","Marrom","Cinza","Azul Marinho","Branco","Verde Escuro","Rosa Claro","Roxo","Pink","Amarelo","Bege","Vinho","Azul","Mescla"],
+    img: "assets/img/colors/baby-look-basica/preto.jpg",
+    priceOld: 99.90, priceNow: 79.90,
+    colors: ["Preto","Marrom","Cinza","Azul Marinho","Branco","Verde Escuro","Rosa Claro","Roxo","Rosa","Amarelo","Bege","Vinho","Azul","Mescla"],
     sizes: [["P","58,5","44"],["M","61","46,5"],["G","64","48,5"],["GG","65","51"]],
     comp: "100% algodão · fio 30/1 compactado · pré-encolhida no tingimento",
   },
   {
     name: "Cropped",
     note: "Comprimento curto, pra usar com saia ou calça alta.",
-    img: "assets/img/cropped_front_black.jpg",
-    priceOld: 60, priceNow: 50,
-    colors: ["Verde Escuro","Preto","Roxo","Cinza","Amarelo","Branco","Vinho","Rosa Claro","Mescla","Pink","Vermelho Claro","Bege","Azul Marinho"],
+    img: "assets/img/colors/cropped/azul-marinho.jpg",
+    priceOld: 99.90, priceNow: 79.90,
+    colors: ["Verde Escuro","Preto","Roxo","Cinza","Amarelo","Branco","Vinho","Rosa Claro","Mescla","Rosa","Vermelho Claro","Bege","Azul Marinho"],
     sizes: [["P","41","45"],["M","43","49"],["G","45","50"],["GG","46","55"]],
     comp: "100% algodão · fio 30/1 compactado · pré-encolhida no tingimento",
   },
@@ -79,10 +139,10 @@ const premiumProducts = [
     name: "Cropped Regata de Ribana",
     gender: "feminino",
     note: "Ribana de algodão sustentável premium.",
-    img: "assets/img/cropped_regata_vinho.jpg",
+    img: "assets/img/colors/cropped-regata-de-ribana/rosa.jpg",
     price: 79.90,
-    colors: ["Azul Claro","Salmão","Pink","Verde Musgo","Bege","Chumbo"],
-    finish: "Reativo",
+    colors: ["Azul Oceano","Laranja","Rosa","Militar","Areia","Chumbo"],
+    finish: "Tingimento reativo",
     rows: [
       ["Comprimento frente", "35,3","38,0","40,7","43,4"],
       ["½ tórax", "32,6","35,0","37,4","39,8"],
@@ -94,10 +154,11 @@ const premiumProducts = [
     name: "Cropped Liso",
     gender: "feminino",
     note: "Corte reto com mangas curtas, básico premium.",
-    img: "assets/img/cropped_liso_preto.jpg",
-    price: 109.90,
-    colors: ["Vinho","Branco","Preto"],
-    finish: "Reativo",
+    img: "assets/img/colors/cropped-liso/preto.jpg",
+    priceOld: 109.90,
+    priceNow: 99.90,
+    colors: ["Branco","Preto"],
+    finish: "Tingimento reativo",
     rows: [
       ["Comprimento frente","41,5","43,5","45,5","47,5"],
       ["½ tórax","44,0","46,0","48,0","51,0"],
@@ -112,7 +173,7 @@ const premiumProducts = [
     name: "Cropped Manga Longa",
     gender: "feminino",
     note: "Manga longa, conjunto com moletom.",
-    img: "assets/img/cropped_manga_longa_preto.jpg",
+    img: "assets/img/colors/cropped-manga-longa/preto.jpg",
     price: 109.90,
     colors: ["Branco","Preto"],
     finish: "Tingimento reativo",
@@ -127,13 +188,13 @@ const premiumProducts = [
     comp: "100% algodão · toque ultra macio · não torce/não encolhe",
   },
   {
-    name: "Baby Look Algodão",
+    name: "Baby Look",
     gender: "feminino",
     note: "Básica feminina, tingimento reativo (cores vivas).",
-    img: "assets/img/babylook_algodao_preta.jpg",
+    img: "assets/img/colors/baby-look/bordo.jpg",
     price: 105.90,
-    colors: ["Verde Escuro","Vinho","Bege","Branco","Preto"],
-    finish: "Reativo",
+    colors: ["Esmeralda","Bordo","Cappuccino","Branco","Preto"],
+    finish: "Tingimento reativo",
     rows: [
       ["Comprimento frente","59,5","62,0","64,5","67,0"],
       ["½ tórax","44,6","47,0","49,4","51,8"],
@@ -148,9 +209,10 @@ const premiumProducts = [
     name: "Baby Look Estonada",
     gender: "feminino",
     note: "Tingimento estonado, efeito vintage lavado.",
-    img: "assets/img/babylook_estonada_roxa.jpg",
-    price: 105.90,
-    colors: ["Mostarda","Verde Musgo","Bege","Lilás","Azul Marinho","Chumbo"],
+    img: "assets/img/colors/baby-look-estonada/areia.jpg",
+    priceOld: 109.90,
+    priceNow: 105.90,
+    colors: ["Marrom Bronze","Militar","Areia","Lilás","Azul Marinho","Chumbo"],
     finish: "Estonado (pigmento)",
     rows: [
       ["Comprimento frente","59,5","62,0","64,5","67,0"],
@@ -166,9 +228,10 @@ const premiumProducts = [
     name: "Camiseta Algodão Sustentável",
     gender: "masculino",
     note: "Corte atemporal, caimento leve, gola em ribana.",
-    img: "assets/img/masculina_algodao_preta.jpg",
-    price: 124.90,
-    colors: ["Bege","Azul Marinho","Vinho","Branco","Preto"],
+    img: "assets/img/colors/camiseta-algodao-sustentavel/bordo.jpg",
+    priceOld: 135.90,
+    priceNow: 124.90,
+    colors: ["Off White Reativo","Azul Marinho","Bordo","Branco","Preto"],
     finish: "Reativo",
     rows: [
       ["Comprimento frente","68,8","71,5","74,2","76,9","79,6"],
@@ -184,9 +247,10 @@ const premiumProducts = [
     name: "Camiseta Estonada",
     gender: "masculino",
     note: "Tingimento estonado, característica vintage.",
-    img: "assets/img/masculina_estonada_verde.jpg",
-    price: 124.90,
-    colors: ["Mostarda","Verde Musgo","Bege","Verde Escuro","Laranja Telha","Azul","Azul Marinho","Roxo","Bordô","Chumbo"],
+    img: "assets/img/colors/camiseta-estonada/verde-floresta.jpg",
+    priceOld: 145.90,
+    priceNow: 135.90,
+    colors: ["Marrom Bronze","Militar","Areia","Verde Floresta","Marrom Pardo","Azul","Azul Marinho","Roxo","Bordô","Chumbo"],
     finish: "Estonado (pigmento)",
     rows: [
       ["Comprimento frente","68,8","71,5","74,2","76,9","79,6"],
@@ -202,9 +266,10 @@ const premiumProducts = [
     name: "Oversized Lisa Unissex",
     gender: "unissex",
     note: "Linha streetwear, solta ao corpo, uso unissex.",
-    img: "assets/img/oversized_lisa_unissex.jpg",
-    price: 124.90,
-    colors: ["Areia","Branco","Preto"],
+    img: "assets/img/colors/oversized-lisa-unissex/preto.jpg",
+    priceOld: 155.90,
+    priceNow: 135.90,
+    colors: ["Cappuccino","Branco","Preto"],
     finish: "Reativo",
     rows: [
       ["Comprimento frente","67,6","70,3","73,0","75,7","78,4","81,1"],
@@ -220,9 +285,9 @@ const premiumProducts = [
     name: "Oversized Estonada",
     gender: "masculino",
     note: "Estonado + modelagem oversized streetwear.",
-    img: "assets/img/oversized_estonada_cinza.jpg",
-    price: 129.90,
-    colors: ["Mostarda","Verde Musgo","Chumbo"],
+    img: "assets/img/colors/oversized-estonada/chumbo.jpg",
+    priceOld: 165.90, priceNow: 145.90,
+    colors: ["Marrom Bronze","Militar","Chumbo"],
     finish: "Estonado (pigmento)",
     rows: [
       ["Comprimento frente","67,6","70,3","73,0","75,7","78,4","81,1"],
@@ -233,24 +298,6 @@ const premiumProducts = [
     ],
     head: SIZES_6,
     comp: "100% algodão · 175g/m² · costura de cobertura 2 agulhas, bitola larga",
-  },
-  {
-    name: "Marmorizada Lisa",
-    gender: "masculino",
-    note: "Tingimento marmorizado, efeito pedra rústico.",
-    img: "assets/img/marmorizada_cinza.jpg",
-    price: 129.90,
-    colors: ["Chumbo"],
-    finish: "Marmorizado",
-    rows: [
-      ["Comprimento frente","68,8","71,5","74,2","76,9","79,6"],
-      ["½ tórax","52,0","54,0","57,0","60,0","63,0"],
-      ["Ombro-a-ombro","42,0","44,0","47,0","50,0","53,0"],
-      ["Comprimento manga","19,2","20,5","21,8","23,1","24,4"],
-      ["½ abertura barra manga","16,5","17,5","18,5","19,5","20,5"],
-    ],
-    head: SIZES_6.slice(1),
-    comp: "100% algodão · 175g/m² · gola ribana canelada 1x1 pespontada",
   },
 ];
 
@@ -269,7 +316,8 @@ function buildBasicaCard(p){
   }
   node.querySelector(".tag-card__name").textContent = p.name;
   node.querySelector(".tag-card__note").textContent = p.note;
-  node.querySelector(".tag-card__colors").innerHTML = p.colors.map(swatch).join("");
+  const slug = slugify(p.name);
+  node.querySelector(".tag-card__colors").innerHTML = p.colors.map(c=>swatchBtn(slug,c)).join("");
 
   node.querySelector(".tag-card__price").innerHTML = `
     <span class="old">De R$${p.priceOld.toFixed(2).replace(".",",")}</span>
@@ -285,6 +333,7 @@ function buildBasicaCard(p){
   node.querySelectorAll(".tag-card__flipbtn").forEach(btn=>{
     btn.addEventListener("click", ()=> card.classList.toggle("is-flipped"));
   });
+  wireColorSwatches(node);
 
   return node;
 }
@@ -294,16 +343,19 @@ function buildPremiumCard(p){
   const card = node.querySelector(".tag-card");
   card.dataset.gender = p.gender;
 
+ 
+
   node.querySelector(".tag-card__photo img").src = p.img;
   node.querySelector(".tag-card__photo img").alt = `Camiseta ${p.name}`;
   node.querySelector(".tag-card__badge").textContent = p.finish || "";
   node.querySelector(".tag-card__name").textContent = p.name;
   node.querySelector(".tag-card__note").textContent = p.note;
-  node.querySelector(".tag-card__colors").innerHTML = p.colors.map(swatch).join("");
+  const slug = slugify(p.name);
+  node.querySelector(".tag-card__colors").innerHTML = p.colors.map(c=>swatchBtn(slug,c)).join("");
 
   node.querySelector(".tag-card__price").innerHTML = `
-    <span class="old">&nbsp;</span>
-    <span class="now">R$${p.price.toFixed(2).replace(".",",")}</span>`;
+    <span class="old">${p.priceOld ? `De R$${p.priceOld.toFixed(2).replace(".",",")}` : "&nbsp;"}</span>
+    <span class="now">R$${p.priceNow ? p.priceNow.toFixed(2).replace(".",",") : p.price.toFixed(2).replace(".",",")}</span>`;
 
   node.querySelector(".tag-card__face--back h4").textContent = p.name;
   const thead = node.querySelector(".tag-card__table thead");
@@ -315,6 +367,7 @@ function buildPremiumCard(p){
   node.querySelectorAll(".tag-card__flipbtn").forEach(btn=>{
     btn.addEventListener("click", ()=> card.classList.toggle("is-flipped"));
   });
+  wireColorSwatches(node);
 
   return node;
 }

@@ -45,6 +45,7 @@ a{ color:inherit; text-decoration:none; }
 button{ font-family:inherit; cursor:pointer; }
 h1,h2,h3,h4{ margin:0; font-family:var(--font-display); font-weight:400; letter-spacing:.01em; }
 p{ margin:0; }
+b{ color: var(--thread) }
 
 .sr-only{ position:absolute; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 
@@ -166,6 +167,18 @@ p{ margin:0; }
   .hero__inner{ margin:0 auto; }
 }
 
+/* ============ BULK NOTE (aviso de desconto) ============ */
+.bulk-note{
+  max-width:1180px; margin:0 auto; padding:16px 24px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  text-align:center; flex-wrap:wrap;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background:var(--bg-soft);
+}
+.bulk-note__icon{ font-size:18px; }
+.bulk-note p{ font-size:14px; color:var(--muted); }
+.bulk-note strong{ color:var(--thread); font-weight:700; }
+
 /* ============ LINE (section) HEAD ============ */
 .line{ padding:90px 24px 40px; max-width:1180px; margin:0 auto; }
 .line__head{
@@ -245,7 +258,7 @@ p{ margin:0; }
   background:#0e0e10;
   overflow:hidden;
 }
-.tag-card__photo img{ width:100%; height:100%; object-fit:cover; }
+.tag-card__photo img{ width:100%; height:100%; object-fit:cover; transition:opacity .18s ease; }
 .tag-card__badge{
   position:absolute; top:12px; left:12px;
   background:var(--thread); color:#fff;
@@ -262,8 +275,19 @@ p{ margin:0; }
 .tag-card__colors{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
 .tag-card__swatch{
   width:20px; height:20px; border-radius:50%;
-  border:2px solid rgba(0,0,0,.15);
+  border:2px solid var(--kraft);
   position:relative;
+  padding:0; margin:0; appearance:none; -webkit-appearance:none;
+  cursor:pointer;
+  transition:transform .15s, box-shadow .15s;
+}
+.tag-card__swatch:hover{ transform:scale(1.12); }
+.tag-card__swatch:active{ transform:scale(.95); }
+.tag-card__swatch.is-active{
+  box-shadow:0 0 0 2px var(--kraft), 0 0 0 4px var(--kraft-ink);
+}
+.tag-grid--premium .tag-card__swatch.is-active{
+  box-shadow:0 0 0 2px var(--premium-stock), 0 0 0 4px var(--foil);
 }
 .tag-card__swatch[data-title]:hover::after{
   content:attr(data-title);
@@ -272,14 +296,31 @@ p{ margin:0; }
   font-size:10px; padding:3px 7px; border-radius:5px; white-space:nowrap;
   font-family:var(--font-mono);
   pointer-events:none;
+  z-index:2;
+}
+.tag-grid--premium .tag-card__swatch[data-title]:hover::after{
+  background:var(--ink); color:var(--premium-stock);
+}
+/* pisca em vermelho quando ainda não existe foto pra aquela cor */
+.tag-card__swatch--missing{
+  animation:swatchMissing .45s ease 2;
+}
+@keyframes swatchMissing{
+  0%,100%{ box-shadow:0 0 0 0 rgba(194,64,47,0); }
+  50%{ box-shadow:0 0 0 4px rgba(194,64,47,.65); }
 }
 
+.tag-card__colors-hint{
+  font-family:var(--font-mono); font-size:10px; color:var(--kraft-muted);
+  margin:-9px 0 14px; letter-spacing:.01em;
+}
+.tag-grid--premium .tag-card__colors-hint{ color:var(--muted); }
 .tag-card__foot{
   display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
   border-top:1px dashed var(--kraft-edge); padding-top:14px;
 }
 .tag-card__price{ font-family:var(--font-mono); line-height:1.3; }
-.tag-card__price .old{ display:block; font-size:11px; color:var(--kraft-muted); text-decoration:line-through; }
+.tag-card__price .old{ display:block; font-size:13px; color:var(--kraft-muted); text-decoration:line-through; }
 .tag-card__price .now{ display:block; font-size:22px; font-weight:700; color:var(--thread-dark); }
 .tag-card__flipbtn{
   background:none; border:1px solid var(--kraft-ink); color:var(--kraft-ink);
