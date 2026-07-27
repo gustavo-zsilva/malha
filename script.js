@@ -232,7 +232,7 @@ const premiumProducts = [
     priceOld: 135.90,
     priceNow: 124.90,
     colors: ["Off White Reativo","Azul Marinho","Bordo","Branco","Preto"],
-    finish: "Reativo",
+    finish: "Tingimento reativo",
     rows: [
       ["Comprimento frente","68,8","71,5","74,2","76,9","79,6"],
       ["½ tórax","52,0","54,0","57,0","60,0","63,0"],
@@ -270,7 +270,7 @@ const premiumProducts = [
     priceOld: 155.90,
     priceNow: 135.90,
     colors: ["Cappuccino","Branco","Preto"],
-    finish: "Reativo",
+    finish: "Tingimento reativo",
     rows: [
       ["Comprimento frente","67,6","70,3","73,0","75,7","78,4","81,1"],
       ["½ tórax","51,0","54,0","57,0","60,0","63,0","66,0"],
@@ -431,4 +431,20 @@ const burger = document.getElementById("burger");
 const navTabsWrap = document.querySelector(".nav__tabs");
 burger?.addEventListener("click", ()=>{
   navTabsWrap.style.display = navTabsWrap.style.display === "flex" ? "none" : "flex";
+});
+
+/* --------- PROCESSO: liga/desliga o placeholder "vídeo em breve" --------- */
+document.querySelectorAll(".process__media").forEach(box=>{
+  const video = box.querySelector("video");
+  if (!video) return;
+  const markHasVideo = () => box.classList.add("has-video");
+  const markNoVideo = () => box.classList.remove("has-video");
+  video.addEventListener("loadeddata", markHasVideo);
+  video.addEventListener("error", markNoVideo);
+  // se o arquivo não existir, o próprio <source> dispara "error" no elemento pai
+  video.querySelectorAll("source").forEach(src=>{
+    src.addEventListener("error", markNoVideo);
+  });
+  // tenta dar play (autoplay já cobre a maioria dos navegadores, isso é reforço)
+  video.play?.().catch(()=>{});
 });
