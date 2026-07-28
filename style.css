@@ -418,7 +418,7 @@ b{ color: var(--thread) }
 
 
 /* ============ PROCESSO ============ */
-.process{ padding:90px 24px 40px; max-width:1180px; height: 100vh; margin:0 auto; }
+.process{ padding:90px 24px 40px; max-width:1180px; margin:0 auto; }
 .process__grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
