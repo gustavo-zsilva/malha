@@ -7,7 +7,21 @@
 const CONFIG = {
   whatsappNumber: "5548988479786", // troque pelo seu número, formato DDI+DDD+numero, só dígitos
   whatsappMessage: "Oi! Vi o catálogo de camisetas e queria fazer um pedido.",
+  bulkQty: 2,           // quantas peças pro preço "leve N por..."
+  bulkDiscountPct: 0.10, // 10% de desconto no total dessas N peças (0.10 = 10%)
 };
+
+function formatBRL(value){
+  return `R$${value.toFixed(2).replace(".",",")}`;
+}
+
+/* monta o selo "Leve 2 por R$X (R$Y cada)" a partir do preço unitário atual */
+function bulkPriceHTML(unitPrice){
+  if (!CONFIG.bulkQty || CONFIG.bulkQty < 2 || !CONFIG.bulkDiscountPct) return "";
+  const total = unitPrice * CONFIG.bulkQty * (1 - CONFIG.bulkDiscountPct);
+  const each = total / CONFIG.bulkQty;
+  return `<span class="bulk">Leve ${CONFIG.bulkQty} por ${formatBRL(total)} <em>(${formatBRL(each)} cada)</em></span>`;
+}
 
 /* --------- mapa de cores nomeadas -> hex aproximado --------- */
 const COLOR_MAP = {
@@ -320,8 +334,9 @@ function buildBasicaCard(p){
   node.querySelector(".tag-card__colors").innerHTML = p.colors.map(c=>swatchBtn(slug,c)).join("");
 
   node.querySelector(".tag-card__price").innerHTML = `
-    <span class="old">De R$${p.priceOld.toFixed(2).replace(".",",")}</span>
-    <span class="now">R$${p.priceNow.toFixed(2).replace(".",",")}</span>`;
+    <span class="old">De ${formatBRL(p.priceOld)}</span>
+    <span class="now">${formatBRL(p.priceNow)}</span>
+    ${bulkPriceHTML(p.priceNow)}`;
 
   node.querySelector(".tag-card__face--back h4").textContent = p.name;
   const thead = node.querySelector(".tag-card__table thead");
@@ -353,9 +368,11 @@ function buildPremiumCard(p){
   const slug = slugify(p.name);
   node.querySelector(".tag-card__colors").innerHTML = p.colors.map(c=>swatchBtn(slug,c)).join("");
 
+  const unitPrice = p.priceNow ?? p.price;
   node.querySelector(".tag-card__price").innerHTML = `
-    <span class="old">${p.priceOld ? `De R$${p.priceOld.toFixed(2).replace(".",",")}` : "&nbsp;"}</span>
-    <span class="now">R$${p.priceNow ? p.priceNow.toFixed(2).replace(".",",") : p.price.toFixed(2).replace(".",",")}</span>`;
+    <span class="old">${p.priceOld ? `De ${formatBRL(p.priceOld)}` : "&nbsp;"}</span>
+    <span class="now">${formatBRL(unitPrice)}</span>
+    ${bulkPriceHTML(unitPrice)}`;
 
   node.querySelector(".tag-card__face--back h4").textContent = p.name;
   const thead = node.querySelector(".tag-card__table thead");
