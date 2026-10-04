@@ -142,6 +142,24 @@ const basicaProducts = [
     sizes: [["P","41","45"],["M","43","49"],["G","45","50"],["GG","46","55"]],
     comp: "100% algodão · fio 30/1 compactado · pré-encolhida no tingimento",
   },
+  {
+    name: "Dry Fit",
+    note: "Tecido leve e respirável, seca rápido — ideal pra treino ou dia quente.",
+    img: "assets/img/colors/dry-fit/preto.jpg",
+    priceOld: 99.90, priceNow: 84.90,
+    colors: ["Preto","Branco","Cinza","Azul Marinho","Azul","Vermelho Claro","Bandeira"],
+    sizes: [["P","67","50"],["M","68","52"],["G","71","53"],["GG","74","55"]],
+    comp: "100% poliéster dry fit · tecnologia de secagem rápida · toque leve e respirável",
+  },
+  {
+    name: "Dry Fit Baby Look",
+    note: "Mesma tecnologia dry fit, modelagem feminina ajustada.",
+    img: "assets/img/colors/dry-fit-baby-look/preto.jpg",
+    priceOld: 89.90, priceNow: 74.90,
+    colors: ["Preto","Branco","Cinza","Azul Marinho","Azul","Vermelho Claro","Rosa"],
+    sizes: [["P","58,5","44"],["M","61","46,5"],["G","64","48,5"],["GG","65","51"]],
+    comp: "100% poliéster dry fit · tecnologia de secagem rápida · toque leve e respirável",
+  },
 ];
 
 /* --------- LINHA PREMIUM --------- */
@@ -465,3 +483,92 @@ document.querySelectorAll(".process__media").forEach(box=>{
   // tenta dar play (autoplay já cobre a maioria dos navegadores, isso é reforço)
   video.play?.().catch(()=>{});
 });
+
+/* --------- GALERIA: tenta carregar fotos reais, mostra placeholder se não existir --------- */
+/* Pra adicionar fotos, é só colocar os arquivos em:
+   assets/img/galeria/01.jpg, 02.jpg, 03.jpg ... até GALLERY_SLOTS.
+   O que não existir aparece como "foto em breve" sem quebrar o layout. */
+const GALLERY_SLOTS = 10;
+const galleryGrid = document.getElementById("galleryGrid");
+if (galleryGrid){
+  for (let i = 1; i <= GALLERY_SLOTS; i++){
+    const num = String(i).padStart(2, "0");
+    const path = `assets/img/galeria/${num}.jpg`;
+
+    const item = document.createElement("div");
+    item.className = "gallery__item";
+    item.innerHTML = `
+      <img loading="lazy" alt="Camiseta já entregue, foto ${num}">
+      <div class="gallery__item-empty"><span>✓</span>foto em breve</div>`;
+
+    const img = item.querySelector("img");
+    img.addEventListener("load", () => item.classList.add("has-photo"));
+    img.addEventListener("error", () => item.removeAttribute("data-loading"));
+    img.src = path;
+
+    galleryGrid.appendChild(item);
+  }
+}
+
+/* --------- CONTADOR: anima o "+100 peças" quando a seção entra na tela --------- */
+document.querySelectorAll("[data-count-to]").forEach(el=>{
+  const target = parseInt(el.dataset.countTo, 10) || 0;
+  let done = false;
+  const counterObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if (!entry.isIntersecting || done) return;
+      done = true;
+      const duration = 1100;
+      const start = performance.now();
+      function tick(now){
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out
+        el.textContent = Math.round(target * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(tick);
+      counterObserver.disconnect();
+    });
+  }, { threshold: 0.4 });
+  counterObserver.observe(el);
+});
+
+/* --------- AVALIAÇÕES --------- */
+/* ⚠️ Exemplo — troque pelos depoimentos reais dos seus clientes antes de publicar. */
+const reviewsData = [
+  {
+    name: "Enzo R. — Eng. Elétrica 2026.1",
+    rating: 5,
+    text: "Fechamos a camiseta de turma com eles e foi tranquilo do início ao fim. Chegou tudo certinho, no prazo combinado, e a estampa ficou show.",
+  },
+  {
+    name: "Marina T.",
+    rating: 5,
+    text: "Comprei uma peça da linha premium e o tecido é bem melhor do que eu esperava por esse preço. Lavei várias vezes e não desbotou.",
+  },
+  {
+    name: "Pedro H.",
+    rating: 5,
+    text: "Gostei de não ter pedido mínimo — pedi só uma pra testar antes de fechar o lote da galera. Vieram todas iguaizinhas à de teste.",
+  },
+  {
+    name: "Camila S.",
+    rating: 4,
+    text: "Atendimento rápido pelo WhatsApp e tiraram todas as minhas dúvidas sobre tamanho antes de eu fechar. Recomendo.",
+  },
+];
+
+const reviewsGrid = document.getElementById("reviewsGrid");
+if (reviewsGrid){
+  reviewsData.forEach(r=>{
+    const card = document.createElement("article");
+    card.className = "review-card";
+    const stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+    card.innerHTML = `
+      <div class="review-card__stars">${stars}</div>
+      <p class="review-card__text">${r.text}</p>
+      <p class="review-card__name">${r.name}</p>`;
+    reviewsGrid.appendChild(card);
+  });
+}
