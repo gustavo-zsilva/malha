@@ -110,7 +110,7 @@ const basicaProducts = [
     name: "Oversized",
     note: "Corte solto, caimento streetwear.",
     img: "assets/img/colors/oversized/preto.jpg",
-    priceOld: 119.90, priceNow: 95.90,
+    priceOld: 119.90, priceNow: 79.90,
     colors: ["Azul Marinho","Bandeira","Verde Escuro","Preto","Roxo","Cinza","Amarelo","Branco","Azul Claro","Rosa Claro","Vinho","Rosa","Laranja Telha","Bege","Mescla","Azul","Vermelho Claro","Laranja"],
     sizes: [["P","76","53"],["M","77","56"],["G","79","58"],["GG","82,5","61"]],
     comp: "100% algodão · fio 30/1 compactado · pré-encolhida no tingimento",
@@ -538,24 +538,24 @@ document.querySelectorAll("[data-count-to]").forEach(el=>{
 /* ⚠️ Exemplo — troque pelos depoimentos reais dos seus clientes antes de publicar. */
 const reviewsData = [
   {
-    name: "Enzo R. — Eng. Elétrica 2026.1",
+    name: "Maria G.",
     rating: 5,
-    text: "Fechamos a camiseta de turma com eles e foi tranquilo do início ao fim. Chegou tudo certinho, no prazo combinado, e a estampa ficou show.",
+    text: "ótimo serviço e ótimo produto!",
   },
   {
     name: "Marina T.",
     rating: 5,
-    text: "Comprei uma peça da linha premium e o tecido é bem melhor do que eu esperava por esse preço. Lavei várias vezes e não desbotou.",
+    text: "Comprei uma peça da linha premium e o tecido é bem melhor do que eu esperava. já lavei várias vezes e não desbotou.",
   },
   {
-    name: "Pedro H.",
+    name: "Letícia P.",
     rating: 5,
-    text: "Gostei de não ter pedido mínimo — pedi só uma pra testar antes de fechar o lote da galera. Vieram todas iguaizinhas à de teste.",
+    text: "muito cheirosas e caprichadas, amei e recomendei :)",
   },
   {
     name: "Camila S.",
     rating: 4,
-    text: "Atendimento rápido pelo WhatsApp e tiraram todas as minhas dúvidas sobre tamanho antes de eu fechar. Recomendo.",
+    text: "atendimento rápido pelo whats e tiraram todas as minhas dúvidas sobre tamanho antes de eu fechar. recomendo!",
   },
 ];
 
@@ -572,3 +572,64 @@ if (reviewsGrid){
     reviewsGrid.appendChild(card);
   });
 }
+
+/* --------- FAIXA ROLANTE DO TOPO --------- */
+/* Edite os textos aqui. Cada item vira um "slide" da faixa que fica rodando. */
+const MARQUEE_ITEMS = [
+  "Envios para todo o Brasil",
+  "Altamente customizável",
+  "Descontos progressivos",
+  "Sem pedido mínimo",
+  "Valores já incluem a estampa",
+  "Dupla prensagem · dura mais lavagens",
+  "Feito à mão em Florianópolis",
+];
+const MARQUEE_SPEED = 55; // px por segundo (maior = mais rápido)
+
+function buildMarquee(){
+  const track = document.getElementById("marqueeTrack");
+  if (!track) return;
+
+  const makeGroup = (reps) => {
+    const ul = document.createElement("ul");
+    ul.className = "marquee__group";
+    for (let r = 0; r < reps; r++){
+      MARQUEE_ITEMS.forEach(text=>{
+        const li = document.createElement("li");
+        li.textContent = text;
+        ul.appendChild(li);
+      });
+    }
+    return ul;
+  };
+
+  track.classList.remove("is-ready");
+  track.innerHTML = "";
+
+  // mede 1 grupo e repete o suficiente pra cobrir a largura da tela
+  let group = makeGroup(1);
+  track.appendChild(group);
+  const oneWidth = group.getBoundingClientRect().width || 1;
+  const reps = Math.max(1, Math.ceil(window.innerWidth / oneWidth));
+  if (reps > 1){
+    track.innerHTML = "";
+    group = makeGroup(reps);
+    track.appendChild(group);
+  }
+
+  // 2º grupo idêntico = loop sem emenda (a animação anda -50%)
+  const clone = group.cloneNode(true);
+  clone.setAttribute("aria-hidden", "true");
+  track.appendChild(clone);
+
+  const groupWidth = group.getBoundingClientRect().width;
+  track.style.setProperty("--marquee-duration", `${groupWidth / MARQUEE_SPEED}s`);
+  track.classList.add("is-ready");
+}
+
+(document.fonts?.ready ?? Promise.resolve()).then(buildMarquee);
+let marqueeResizeTimer;
+window.addEventListener("resize", ()=>{
+  clearTimeout(marqueeResizeTimer);
+  marqueeResizeTimer = setTimeout(buildMarquee, 200);
+});

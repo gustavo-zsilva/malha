@@ -13,6 +13,11 @@
 </head>
 <body>
 
+<!-- ===== FAIXA ROLANTE (itens editáveis em script.js → MARQUEE_ITEMS) ===== -->
+<div class="marquee" role="region" aria-label="Destaques da loja">
+  <div class="marquee__track" id="marqueeTrack"></div>
+</div>
+
 <!-- ===== NAV ===== -->
 <header class="nav" id="nav">
   <div class="nav__inner">
@@ -45,10 +50,20 @@
         <a href="#premium" class="btn btn--ghost" data-scrollto="premium">Ver Linha Premium</a>
       </div>
     </div>
-    <div class="hero__tag" aria-hidden="true">
-      <div class="hero__tag-string"></div>
-      <img src="assets/img/hero.jpg" alt="">
-    </div>
+    <figure class="hero__photo">
+      <div class="hero__photo-media">
+        <img src="assets/img/hero.jpg" alt="Camisetas estampadas, embaladas e prontas pra envio">
+      </div>
+      <figcaption class="hero__caption">Feito à mão · Florianópolis / SC</figcaption>
+      <div class="hero__tag" aria-hidden="true">
+        <div class="hero__tag-string"></div>
+        <div class="hero__tag-body">
+          <span class="hero__tag-kicker">feito à mão</span>
+          <strong><span data-count-to="150">0</span>+</strong>
+          <span class="hero__tag-label">peças entregues</span>
+        </div>
+      </div>
+    </figure>
   </section>
 
   <!-- ===== AVISO: DESCONTO POR QUANTIDADE ===== -->
@@ -67,7 +82,7 @@
       </div>
       <div class="line__price-range">
         <span>a partir de</span>
-        <strong>R$54,90</strong>
+        <strong>R$69,90</strong>
       </div>
     </div>
 
@@ -339,7 +354,7 @@
       <h2>Fechou a arte?<br>Bora combinar tamanho, cor e prazo.</h2>
       <p>Me chama no WhatsApp com o modelo, a cor e o tamanho — te devolvo o valor final e o prazo de entrega na hora.</p>
       <a href="#" id="contactWhats" class="btn btn--thread btn--lg" target="_blank" rel="noopener">Chamar no WhatsApp</a>
-      <p class="contact__note">Pedido mínimo e prazos variam por lote. Fechando 10 peças ou mais, tem desconto a combinar.</p>
+      <p class="contact__note">Prazos variam por lote. Fechando 10 peças ou mais, tem desconto a combinar.</p>
     </div>
     <div class="policy">
       <p class="policy__title">Antes de fechar, um combinado:</p>

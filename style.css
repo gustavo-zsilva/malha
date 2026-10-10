@@ -140,31 +140,169 @@ b{ color: var(--thread) }
 .btn--ghost{ border-color:var(--line); color:var(--ink); }
 .btn--ghost:hover{ border-color:var(--ink); }
 .btn--lg{ padding:17px 34px; font-size:16px; }
+/* ---- foto do hero: grande, sangrando até a borda direita ---- */
+.hero__photo{
+  position:absolute; top:0; right:0; bottom:0;
+  width:min(54%, 820px);
+  margin:0;
+  z-index:0;
+}
+.hero__photo-media{
+  position:absolute; inset:0;
+  overflow:hidden;
+  /* a foto "nasce" do fundo: transparente na esquerda e na base, sem emenda */
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, rgba(0,0,0,.55) 20%, #000 52%),
+    linear-gradient(0deg, transparent 0%, #000 24%);
+  -webkit-mask-composite:source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, rgba(0,0,0,.55) 20%, #000 52%),
+    linear-gradient(0deg, transparent 0%, #000 24%);
+  mask-composite:intersect;
+}
+.hero__photo-media > img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+  filter:contrast(1.06) saturate(1.05);
+  transform-origin:60% 50%;
+  animation:heroZoom 20s ease-in-out infinite alternate;
+}
+@keyframes heroZoom{
+  from{ transform:scale(1); }
+  to{ transform:scale(1.07); }
+}
+/* escurece levemente a esquerda (contraste do texto) e o topo (junto do menu) */
+.hero__photo-media::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(23,23,27,.7) 0%, rgba(23,23,27,0) 50%),
+    linear-gradient(180deg, rgba(23,23,27,.55) 0%, rgba(23,23,27,0) 18%);
+}
+.hero__caption{
+  position:absolute; right:24px; bottom:26px; z-index:2;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink);
+  padding:8px 12px;
+  background:rgba(23,23,27,.72);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:100px;
+  backdrop-filter:blur(6px);
+}
 
+/* etiqueta pendurada por cima da foto */
 .hero__tag{
-  position:absolute;
-  right:8%;
-  top:14%;
-  width:min(300px, 26vw);
-  z-index:1;
+  position:absolute; z-index:3;
+  top:0; right:max(36px, 9%);
   transform-origin:top center;
   animation:swing 6.5s ease-in-out infinite;
-  filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));
+  filter:drop-shadow(0 22px 30px rgba(0,0,0,.55));
 }
-.hero__tag img{ border-radius:14px; border:1px solid rgba(255,255,255,.08); }
 .hero__tag-string{
-  position:absolute; left:50%; top:-46px; width:1px; height:50px;
-  background:linear-gradient(var(--muted), transparent);
-  transform:translateX(-50%);
+  width:2px; height:64px; margin:0 auto;
+  background:linear-gradient(#cfc7b0, #8d866f);
+}
+.hero__tag-body{
+  position:relative;
+  width:150px; padding:34px 14px 18px;
+  background:var(--kraft); color:var(--kraft-ink);
+  border:1px solid var(--kraft-edge);
+  border-radius:6px 6px 14px 14px;
+  clip-path:polygon(14% 0, 86% 0, 100% 14%, 100% 100%, 0 100%, 0 14%);
+  text-align:center;
+  display:flex; flex-direction:column; gap:2px;
+}
+.hero__tag-body::before{
+  content:""; position:absolute; top:12px; left:50%; transform:translateX(-50%);
+  width:14px; height:14px; border-radius:50%;
+  background:var(--bg); border:2px solid var(--kraft-edge);
+}
+.hero__tag-kicker{
+  font-family:var(--font-mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--kraft-muted);
+}
+.hero__tag-body strong{
+  font-family:var(--font-display); font-weight:400;
+  font-size:54px; line-height:1; color:var(--thread-dark);
+}
+.hero__tag-label{
+  font-family:var(--font-mono); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
 }
 @keyframes swing{
   0%,100%{ transform:rotate(-4deg); }
   50%{ transform:rotate(4deg); }
 }
-@media (max-width:900px){ .hero__tag{ display:none; } }
+
+/* tablet: foto continua à direita, mais discreta atrás do texto */
+@media (max-width:900px){
+  .hero__photo{ width:64%; }
+  .hero__photo-media{ opacity:.9; }
+  .hero__photo-media::after{
+    background:
+      linear-gradient(90deg, rgba(23,23,27,.85) 0%, rgba(23,23,27,.3) 100%);
+  }
+  .hero__caption{ display:none; }
+}
+/* celular: foto vira banner no topo, texto embaixo */
 @media (max-width:600px){
-  .hero{ min-height:auto; padding-top:64px; }
-  .hero__inner{ margin:0 auto; }
+  .hero{ min-height:auto; flex-direction:column; align-items:stretch; padding:0 24px 56px; }
+  .hero__photo-media{ opacity:1; }
+  .hero__photo{
+    position:relative; order:-1;
+    width:calc(100% + 48px); margin:0 -24px;
+    height:min(62vw, 340px);
+  }
+  .hero__photo-media{
+    -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 42%);
+    mask-image: linear-gradient(0deg, transparent 0%, #000 42%);
+  }
+  .hero__photo-media::after{
+    background: linear-gradient(180deg, rgba(23,23,27,.45) 0%, rgba(23,23,27,0) 25%);
+  }
+  .hero__caption{ display:block; right:auto; left:24px; bottom:18px; font-size:10px; }
+  .hero__tag{ right:20px; }
+  .hero__tag-string{ height:30px; }
+  .hero__tag-body{ width:118px; padding:28px 10px 12px; }
+  .hero__tag-body strong{ font-size:36px; }
+  .hero__tag-kicker{ font-size:8px; }
+  .hero__tag-label{ font-size:8.5px; }
+  .hero__inner{ margin:18px auto 0; }
+}
+
+/* ============ FAIXA ROLANTE (topo) ============ */
+.marquee{
+  background:var(--thread);
+  color:#fff;
+  overflow:hidden;
+  border-bottom:1px solid rgba(0,0,0,.28);
+}
+.marquee__track{
+  display:flex; width:max-content;
+}
+.marquee__track.is-ready{
+  animation:marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee:hover .marquee__track{ animation-play-state:paused; }
+.marquee__group{
+  display:flex; flex-shrink:0;
+  margin:0; padding:0; list-style:none;
+}
+.marquee__group li{
+  display:flex; align-items:center; white-space:nowrap;
+  padding:10px 0;
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.marquee__group li::after{
+  content:"✦"; margin:0 28px; opacity:.65; font-size:11px;
+}
+@keyframes marquee{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .marquee__track.is-ready{ animation:none; }
+  .hero__photo-media > img{ animation:none; }
 }
 
 /* ============ BULK NOTE (aviso de desconto) ============ */
